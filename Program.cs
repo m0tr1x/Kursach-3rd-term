@@ -282,11 +282,111 @@ class Repository
     }
 }
 
+/// <summary>
+/// Интерфейс для поиска
+/// </summary>
+/// <typeparam name="T">Тип данных</typeparam>
+interface ISearchable<T>
+{
+    /// <summary>
+    /// Метод для поиска по имени
+    /// </summary>
+    /// <param name="items">Список с данными</param>
+    /// <param name="result">Нужный результат</param>
+    /// <returns></returns>
+    List<T> SearchByName(List<T> items, string result);
+}
+/// <summary>
+/// Класс для поиска книг
+/// </summary>
+class BookSearch : ISearchable<Book>
+{
+    /// <summary>
+    /// Реализуем интерфейс для поиска по имени
+    /// </summary>
+    /// <param name="users">Список </param>
+    /// <param name="name">Требуемое имя</param>
+    /// <returns></returns>
+    public List<Book> SearchByName(List<Book> books, string title)
+    {
+        List<Book> foundBooks = books.Where(book => book.Name.Contains(title)).ToList();
+        return foundBooks;
+    }
+
+    public List<Book> SearchByAuthor(List<Book> books, string author)
+    {
+        List<Book> foundBooks = books.Where(book => book.Author.Contains(author)).ToList();
+        return foundBooks;
+    }
+
+}
+/// <summary>
+/// Класс для поиска пользователей
+/// </summary>
+class UserSearch : ISearchable<User>
+{
+    /// <summary>
+    /// Реализуем интерфейс для поиска по имени
+    /// </summary>
+    /// <param name="users">Список </param>
+    /// <param name="name">Требуемое имя</param>
+    /// <returns></returns>
+    public List<User> SearchByName(List<User> users, string name)
+    {
+        List<User> foundUsers = users.Where(user => user.Name.ToLower().Contains(name.ToLower())).ToList();
+        return foundUsers;
+    }
+
+    public List<User> SearchByRole(List<User> users, string role)
+    {
+        List<User> foundUsers = users.Where(user => user.Role.ToLower() == role.ToLower()).ToList();
+        return foundUsers;
+    }
+}
 
 class Program
 {
+    static List<User> users;
+    static List<Book> books;
+    static Repository repository = new Repository();
+
+    /// <summary>
+    /// Метод для загрузки даных
+    /// </summary>
+    static void LoadData()
+    {
+        users = repository.LoadUsers("users.txt");
+        books = repository.LoadBooks("books.txt");
+    }
+    /// <summary>
+    /// Метод для обновления данных
+    /// </summary>
+    static void UpdateData()
+    {
+        repository.SaveUsers(users, "users.txt");
+        repository.SaveBooks(books, "books.txt");
+    }
+    /// <summary>
+    /// Событие, которое при выходе из программы обновляет списки
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    static void OnExit(object sender, EventArgs e)
+    {
+        UpdateData(); // Обновление данных при закрытии программы
+    }
+
+    /// <summary>
+    /// Событие для старта программы
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
+    static void OnStart(object sender, EventArgs e)
+    {
+        LoadData(); // Загружаем данные при запуске программы
+    }
     static void Main()
     {
-
+        AppDomain.CurrentDomain.ProcessExit += OnExit;
     }
 }
