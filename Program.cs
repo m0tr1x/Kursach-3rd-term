@@ -7,13 +7,13 @@ class Book
     private string? _author;
     private double _condition;
     // Название книги
-    public string? Name 
+    public string? Name
     {
         get { return _name; }
         set { if (value != null) _name = value; }
     }
     // Автор книги
-    public string? Author 
+    public string? Author
     {
         get { return _author; }
         set { if (value != null) _author = value; }
@@ -96,7 +96,7 @@ class Customer : User
         }
         else
         {
-            Console.WriteLine("Книга недоступна в данный момент.");
+            Console.WriteLine($"Книга \"{book.Name}\" недоступна в данный момент.\n");
         }
     }
     /// <summary>
@@ -109,29 +109,29 @@ class Customer : User
         {
             _takenBooks.Remove(book);
             book.MarkAsReturned();
-            Console.WriteLine($"{Name} вернул книгу: {book.Name} от {book.Author}");
+            Console.WriteLine($"{Name} вернул книгу: {book.Name} от {book.Author}\n");
         }
         else
         {
-            Console.WriteLine("Эта книга не была взята вами.");
+            Console.WriteLine($"Книга \"{book.Name}\" не была взята вами.\n");
         }
     }
 }
 
 class Librarian : User
 {
-    public Librarian(string name) : base("Работник",name) {}
+    public Librarian(string name) : base("Работник", name) { }
     /// <summary>
     /// Метод для добавление книги со стороны работника
     /// </summary>
     /// <param name="example"> Экземпляр книги</param>
-    public void AddBook(Book example)
+    public void AddBook(Book book)
     {
-        Biblioteque.AddBookToLibrary(example);
-        Console.WriteLine($"{Name} добавил книгу в библиотеку");
+        Biblioteque.AddBookToLibrary(book);
+        Console.WriteLine($"{Name} добавил книгу \"{book.Name}\" в библиотеку\n");
     }
-    
-    
+
+
 }
 
 /// <summary>
@@ -139,8 +139,8 @@ class Librarian : User
 /// </summary>
 static class Biblioteque
 {
-    private static List<Book> books = new List<Book>();
-    private static List<User> users = new List<User>();
+    public static List<Book> books = new ();
+    public static List<User> users = new ();
     /// <summary>1
     /// Метод для вывод количества книг на экран
     /// </summary>
@@ -161,6 +161,36 @@ static class Biblioteque
         example.Avaliable = false;
         example.Condition -= 1;
     }
+    /// <summary>
+    /// Метод для вывода всех пользователей
+    /// </summary>
+    public static void DisplayAllUsers()
+    {
+        foreach (var user in users)
+        {
+            Console.WriteLine($"User: {user.Name} ({user.Role})");
+        }
+        Console.WriteLine();
+    }
+    /// <summary>
+    /// Метод для вывода всех книг
+    /// </summary>
+    public static void DisplayAllBooks()
+    {
+        foreach (var book in books)
+        {
+            Console.WriteLine($"Book: {book.Name} by {book.Author}, Condition: {book.Condition}, Available: {(book.Avaliable ? "Yes" : "No")}");
+        }
+        Console.WriteLine();
+    }
+    /// <summary>
+    /// Метод для добавления пользователя в библиотеку
+    /// </summary>
+    /// <param name="user">Экземпляр пользователя</param>
+    public static void AddUserToLibrary(User user)
+    {
+        users.Add(user);
+    }
 }
 /// <summary>
 /// Класс для сохранения и загрузки пользователей и книг
@@ -172,9 +202,9 @@ class Repository
     /// </summary>
     /// <param name="filePath">Путь к файлу</param>
     /// <returns></returns>
-    public List<User> LoadUsers(string filePath)
+    public static List<User> LoadUsers(string filePath)
     {
-        List<User> users = new List<User>();
+        List<User> users = new ();
 
         try
         {
@@ -209,9 +239,9 @@ class Repository
     /// </summary>
     /// <param name="filePath">Путь к файлу</param>
     /// <returns></returns>
-    public List<Book> LoadBooks(string filePath)
+    public static List<Book> LoadBooks(string filePath)
     {
-        List<Book> books = new List<Book>();
+        List<Book> books = new ();
 
         try
         {
@@ -241,16 +271,14 @@ class Repository
     /// </summary>
     /// <param name="users"> Список пользователей</param>
     /// <param name="filePath">Путь к файлу</param>
-    public void SaveUsers(List<User> users, string filePath)
+    public static void SaveUsers(List<User> users, string filePath)
     {
         try
         {
-            using (StreamWriter writer = new StreamWriter(filePath))
+            using StreamWriter writer = new(filePath);
+            foreach (User user in Biblioteque.users)
             {
-                foreach (User user in users)
-                {
-                    writer.WriteLine($"{user.Name},{user.Role}");
-                }
+                writer.WriteLine($"{user.Name},{user.Role}");
             }
         }
         catch (IOException e)
@@ -263,16 +291,14 @@ class Repository
     /// </summary>
     /// <param name="books">Список книг</param>
     /// <param name="filePath">Путь к файлу</param>
-    public void SaveBooks(List<Book> books, string filePath)
+    public static void SaveBooks(List<Book> books, string filePath)
     {
         try
         {
-            using (StreamWriter writer = new StreamWriter(filePath))
+            using StreamWriter writer = new(filePath);
+            foreach (Book book in Biblioteque.books)
             {
-                foreach (Book book in books)
-                {
-                    writer.WriteLine($"{book.Name},{book.Author},{book.Condition},{book.Avaliable}");
-                }
+                writer.WriteLine($"{book.Name},{book.Author},{book.Condition},{book.Avaliable}");
             }
         }
         catch (IOException e)
@@ -294,7 +320,7 @@ interface ISearchable<T>
     /// <param name="items">Список с данными</param>
     /// <param name="result">Нужный результат</param>
     /// <returns></returns>
-    List<T> SearchByName(List<T> items, string result);
+     List<T> SearchByName(List<T> items, string result);
 }
 /// <summary>
 /// Класс для поиска книг
@@ -307,13 +333,13 @@ class BookSearch : ISearchable<Book>
     /// <param name="users">Список </param>
     /// <param name="name">Требуемое имя</param>
     /// <returns></returns>
-    public List<Book> SearchByName(List<Book> books, string title)
+    public   List<Book> SearchByName(List<Book> books, string title)
     {
         List<Book> foundBooks = books.Where(book => book.Name.Contains(title)).ToList();
         return foundBooks;
     }
 
-    public List<Book> SearchByAuthor(List<Book> books, string author)
+    public static List<Book> SearchByAuthor(List<Book> books, string author)
     {
         List<Book> foundBooks = books.Where(book => book.Author.Contains(author)).ToList();
         return foundBooks;
@@ -331,13 +357,13 @@ class UserSearch : ISearchable<User>
     /// <param name="users">Список </param>
     /// <param name="name">Требуемое имя</param>
     /// <returns></returns>
-    public List<User> SearchByName(List<User> users, string name)
+    public  List<User> SearchByName(List<User> users, string name)
     {
         List<User> foundUsers = users.Where(user => user.Name.ToLower().Contains(name.ToLower())).ToList();
         return foundUsers;
     }
 
-    public List<User> SearchByRole(List<User> users, string role)
+    public static List<User> SearchByRole(List<User> users, string role)
     {
         List<User> foundUsers = users.Where(user => user.Role.ToLower() == role.ToLower()).ToList();
         return foundUsers;
@@ -348,23 +374,22 @@ class Program
 {
     static List<User> users;
     static List<Book> books;
-    static Repository repository = new Repository();
 
     /// <summary>
     /// Метод для загрузки даных
     /// </summary>
     static void LoadData()
     {
-        users = repository.LoadUsers("users.txt");
-        books = repository.LoadBooks("books.txt");
+        Biblioteque.users = Repository.LoadUsers("users.txt");
+        Biblioteque.books = Repository.LoadBooks("books.txt");
     }
     /// <summary>
     /// Метод для обновления данных
     /// </summary>
     static void UpdateData()
     {
-        repository.SaveUsers(users, "users.txt");
-        repository.SaveBooks(books, "books.txt");
+        Repository.SaveUsers(users, "users.txt");
+        Repository.SaveBooks(books, "books.txt");
     }
     /// <summary>
     /// Событие, которое при выходе из программы обновляет списки
@@ -387,6 +412,40 @@ class Program
     }
     static void Main()
     {
-        AppDomain.CurrentDomain.ProcessExit += OnExit;
+        LoadData(); //Загружаем данные при старте программы
+        AppDomain.CurrentDomain.ProcessExit += OnExit; // Подисываемся на событие закрытия приложения
+        User userToAdd = new Customer("Михаил Закарян");
+        Biblioteque.AddUserToLibrary(userToAdd);
+
+
+
+        // Вывод пользователей на экран
+        Console.WriteLine("Список пользователей:");
+        Biblioteque.DisplayAllUsers();
+        // Вывод книг на экран
+        Console.WriteLine("\nСписок книг:");
+        Biblioteque.DisplayAllBooks();
+
+        // Пример использования функциональности:
+        Customer customer = (Customer)Biblioteque.users.FirstOrDefault(u => u.Role == "Читатель");
+        if (customer != null)
+        {
+            customer.GetBook(Biblioteque.books.FirstOrDefault(b => b.Name == "Война и мир"));
+            customer.ReturnBook(Biblioteque.books.FirstOrDefault(b => b.Name == "Преступление и наказание"));
+        }
+        else
+        {
+            Console.WriteLine($"Читатель {customer.Name} не найден.");
+        }
+
+        Librarian librarian = (Librarian)Biblioteque.users.FirstOrDefault(u => u.Role == "Работник");
+        if (librarian != null)
+        {
+            librarian.AddBook(new Book("Новая книга", "Новый автор", 70, true));
+        }
+        else
+        {
+            Console.WriteLine($"Работник  {librarian.Name} не найден.");
+        }
     }
 }
