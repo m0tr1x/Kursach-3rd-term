@@ -7,4 +7,7 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="bin\Debug\net6.0\users.txt" />
+  </ItemGroup>
 </Project>
