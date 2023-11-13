@@ -11,7 +11,8 @@ namespace Biblioteque
 
         // ФИО пользователя
         private string _name;
-        private string _password;
+        //Его пароль
+        public string Password { get; private set; }
         public string Name
 
         {
@@ -24,7 +25,7 @@ namespace Biblioteque
         {
             Role = role;
             Name = name;
-            _password = password;
+            Password = password;
         }
 
         /// <summary>
@@ -34,7 +35,7 @@ namespace Biblioteque
         /// <returns></returns>
         public bool Authenticate(string password)
         {
-            return _password == password;
+            return Password == password;
         }
 
     }

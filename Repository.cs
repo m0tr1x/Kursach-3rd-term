@@ -25,14 +25,15 @@
 
                     string name = userData[0];
                     string role = userData[1];
+                    string password = userData[2];
 
                     if (role == "Читатель")
                     {
-                        users.Add(new Customer(name));
+                        users.Add(new Customer(name,password));
                     }
                     else if (role == "Работник")
                     {
-                        users.Add(new Librarian(name));
+                        users.Add(new Librarian(name, password));
                     }
                 }
             }
@@ -87,7 +88,7 @@
                 using StreamWriter writer = new(filePath);
                 foreach (User user in Biblioteque.users)
                 {
-                    writer.WriteLine($"{user.Name},{user.Role}");
+                    writer.WriteLine($"{user.Name},{user.Role},{user.Password}");
                 }
             }
             catch (IOException e)
