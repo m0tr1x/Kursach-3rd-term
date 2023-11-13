@@ -9,6 +9,7 @@
         private string? _name;
         private string? _author;
         private double _condition;
+        private string? _genre;
         // Название книги
         public string? Name
         {
