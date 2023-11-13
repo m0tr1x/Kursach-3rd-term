@@ -1,43 +1,46 @@
-﻿
-/// <summary>
-/// Читатель
-/// </summary>
-class Customer : User
+﻿namespace Biblioteque
 {
-    private List<Book> _takenBooks;
-    public Customer(string name) : base("Читатель", name) { _takenBooks = new List<Book>(); }
     /// <summary>
-    /// Метод для взятия книги в библиотеке
+    /// Читатель
     /// </summary>
-    /// <param name="book"> экземпляр книги</param>
-    public void GetBook(Book book)
+    class Customer : User
     {
-        if (book.Avaliable)
+        private List<Book> _takenBooks;
+        public Customer(string name, string password) : base("Читатель", name, password) { _takenBooks = new List<Book>(); }
+        /// <summary>
+        /// Метод для взятия книги в библиотеке
+        /// </summary>
+        /// <param name="book"> экземпляр книги</param>
+        public void GetBook(Book book)
         {
-            _takenBooks.Add(book);
-            book.MarkAsTaken();
-            Console.WriteLine($"{Name} взял книгу: {book.Name} от {book.Author}");
+            if (book.Avaliable)
+            {
+                _takenBooks.Add(book);
+                book.MarkAsTaken();
+                Console.WriteLine($"{Name} взял книгу: {book.Name} от {book.Author}");
+            }
+            else
+            {
+                Console.WriteLine($"Книга \"{book.Name}\" недоступна в данный момент.\n");
+            }
         }
-        else
+        /// <summary>
+        /// Метод для возвращения книги назад
+        /// </summary>
+        /// <param name="book"></param>
+        public void ReturnBook(Book book)
         {
-            Console.WriteLine($"Книга \"{book.Name}\" недоступна в данный момент.\n");
+            if (_takenBooks.Contains(book))
+            {
+                _takenBooks.Remove(book);
+                book.MarkAsReturned();
+                Console.WriteLine($"{Name} вернул книгу: {book.Name} от {book.Author}\n");
+            }
+            else
+            {
+                Console.WriteLine($"Книга \"{book.Name}\" не была взята вами.\n");
+            }
         }
     }
-    /// <summary>
-    /// Метод для возвращения книги назад
-    /// </summary>
-    /// <param name="book"></param>
-    public void ReturnBook(Book book)
-    {
-        if (_takenBooks.Contains(book))
-        {
-            _takenBooks.Remove(book);
-            book.MarkAsReturned();
-            Console.WriteLine($"{Name} вернул книгу: {book.Name} от {book.Author}\n");
-        }
-        else
-        {
-            Console.WriteLine($"Книга \"{book.Name}\" не была взята вами.\n");
-        }
-    }
+
 }
