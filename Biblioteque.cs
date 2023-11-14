@@ -46,7 +46,15 @@ namespace Biblioteque
         {
             foreach (var book in books)
             {
-                Console.WriteLine($"Book: {book.Name} by {book.Author}, Condition: {book.Condition}, Available: {(book.Avaliable ? "Yes" : "No")}");
+                Console.WriteLine($"Название: {book.Name} Автор: {book.Author}, Состояние: {book.Condition}%, В наличии: {(book.Avaliable ? "Да" : "Нет")}");
+            }
+            Console.WriteLine();
+        }
+        public static void DisplayAllAvaliableBooks()
+        {
+            foreach (var book in books)
+            {
+                if(book.Avaliable) Console.WriteLine($"Название: {book.Name} Автор: {book.Author}, Состояние: {book.Condition}%");
             }
             Console.WriteLine();
         }

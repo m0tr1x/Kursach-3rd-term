@@ -48,7 +48,7 @@ namespace Biblioteque
             {
                 case "1":
                     Console.WriteLine("Какую именно книгу вы хотите взять?");
-                    Biblioteque.DisplayAllBooks();
+                    Biblioteque.DisplayAllAvaliableBooks();
                     string bookNameToTake = Console.ReadLine();
                     customer.GetBook(bookSearch.SearchByName(Biblioteque.books, bookNameToTake)[0]);
                     break;
@@ -62,8 +62,10 @@ namespace Biblioteque
                     customer.GetCustomerBooks();
                     break;
                 case "4":
-                    Console.WriteLine("До свидания!");
-                    return;
+                    Console.WriteLine("Вы вышли из аккаунта");
+                    Program.flag = true;
+                    break;
+                    
                 default:
                     Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
                     break;
@@ -78,7 +80,9 @@ namespace Biblioteque
         {
             Console.WriteLine("Ваши опции:");
             Console.WriteLine("1. Добавить книгу");
-            Console.WriteLine("2. Выйти");
+            Console.WriteLine("2. Посмотреть все книги");
+            Console.WriteLine("3. Посмотреть всех пользователей");
+            Console.WriteLine("4. Выйти");
 
             string choice = Console.ReadLine();
 
@@ -97,7 +101,14 @@ namespace Biblioteque
                     librarian.AddBook(book);
                     break;
                 case "2":
-                    Console.WriteLine("До свидания!");
+                    Biblioteque.DisplayAllBooks();
+                    break;
+                case "3":
+                    Biblioteque.DisplayAllUsers();
+                    break;
+                case "4":
+                    Console.WriteLine("Вы вышли из аккаунта");
+                    Program.flag = true;
                     return;
                 default:
                     Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");

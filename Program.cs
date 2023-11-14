@@ -4,7 +4,7 @@ namespace Biblioteque
 {
     class Program
     {
-
+        public static bool flag;
         static void Main()
         {
             DataHandler.LoadData(); //Загружаем данные при старте программы
@@ -49,7 +49,8 @@ namespace Biblioteque
                     }
                 }
                 // Пользователь залогинен, выполняем его действия
-                else ActionsHandler.UserActions(currentUser);
+                else if (!flag) ActionsHandler.UserActions(currentUser);
+                else currentUser = null;
 
 
             }
