@@ -9,7 +9,7 @@ namespace Biblioteque
         /// <summary>
         /// Метод для логина
         /// </summary>
-        public static void Login()
+        public static User Login()
         {
             //Вводим логин
             Console.WriteLine("Введите логин:");
@@ -24,13 +24,17 @@ namespace Biblioteque
             //Если он не пустой, валидируем пароль
             if(foundUsers.Count > 0)
             {
-                if (foundUsers[0].Authenticate(password)) Console.WriteLine("Вход выполнен успешно!");
-                else Console.WriteLine("Вход не выполнен, неправильный пароль");
+                if (foundUsers[0].Authenticate(password))
+                {
+                    Console.WriteLine("Вход выполнен успешно!");
+                    return foundUsers[0];
+                }
+                else Console.WriteLine("Вход не выполнен, неправильный пароль"); return null;
             }
             //Если нет ошибка
             else
             {
-                Console.WriteLine("Пользователь с указанным именем не найден");
+                Console.WriteLine("Пользователь с указанным именем не найден"); return null;
             }
 
         }

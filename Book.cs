@@ -4,7 +4,7 @@
     /// <summary>
     /// Класс книги 
     /// </summary>
-    class Book
+    public class Book
     {
         private string? _name;
         private string? _author;

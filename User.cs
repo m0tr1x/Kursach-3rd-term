@@ -4,7 +4,7 @@ namespace Biblioteque
     /// <summary>
     /// Абстрактный класс для пользователя, который может быть либо работником, либо читателем
     /// </summary>
-    abstract class User
+    public abstract class User
     {
         // Поле для хранения роли пользователя
         public string Role { get; }

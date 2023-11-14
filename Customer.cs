@@ -3,7 +3,7 @@
     /// <summary>
     /// Читатель
     /// </summary>
-    class Customer : User
+    public class Customer : User
     {
         private List<Book> _takenBooks;
         public Customer(string name, string password) : base("Читатель", name, password) { _takenBooks = new List<Book>(); }
@@ -40,6 +40,24 @@
             {
                 Console.WriteLine($"Книга \"{book.Name}\" не была взята вами.\n");
             }
+        }
+        /// <summary>
+        /// Метод для того, чтобы узнать какие книги есть у пользователя
+        /// </summary>
+        public void GetCustomerBooks()
+        {
+            if(this._takenBooks.Count != 0)
+            {
+                foreach (var book in this._takenBooks)
+                {
+                    Console.WriteLine($"Книга: {book.Name} от {book.Author}");
+                }
+            }
+            else
+            {
+                Console.WriteLine("У вас нет книг");
+            }
+            
         }
     }
 

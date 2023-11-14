@@ -5,7 +5,7 @@ namespace Biblioteque
     /// <summary>
     /// Класс библиотекаря
     /// </summary>
-    class Librarian : User
+    public class Librarian : User
     {
         public Librarian(string name, string password) : base("Работник", name, password) { }
         /// <summary>
