@@ -8,6 +8,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Users\" />
+    <None Remove="SearchThings\" />
+    <None Remove="Actions\" />
+    <None Remove="Library\" />
+    <None Remove="DataSavingAndLoading\" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="bin\Debug\net6.0\users.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Users\" />
+    <Folder Include="SearchThings\" />
+    <Folder Include="Actions\" />
+    <Folder Include="Library\" />
+    <Folder Include="DataSavingAndLoading\" />
   </ItemGroup>
 </Project>
