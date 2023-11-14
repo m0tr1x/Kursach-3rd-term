@@ -62,10 +62,19 @@ namespace Biblioteque
         /// Метод для добавления пользователя в библиотеку
         /// </summary>
         /// <param name="user">Экземпляр пользователя</param>
-        public static void AddUserToLibrary(User user)
+        public static void AddUser(Customer user)
         {
             users.Add(user);
         }
+        /// <summary>
+        /// Метод для добавления работника в библиотеку
+        /// </summary>
+        /// <param name="user">Экземпляр работника</param>
+        public static void AddUser(Librarian user)
+        {
+            users.Add(user);
+        }
+        //Немного ad-hoc полиморфизма
     }
 
 }

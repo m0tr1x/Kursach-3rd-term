@@ -26,7 +26,7 @@ namespace Biblioteque
             {
                 if (foundUsers[0].Authenticate(password))
                 {
-                    Console.WriteLine("Вход выполнен успешно!");
+                    Console.WriteLine($"Вход выполнен успешно!Здравствуйте {foundUsers[0]}");
                     return foundUsers[0];
                 }
                 else Console.WriteLine("Вход не выполнен, неправильный пароль"); return null;
@@ -39,7 +39,7 @@ namespace Biblioteque
 
         }
         /// <summary>
-        /// Метод для регистрации
+        /// Метод для регистрации пользователя
         /// </summary>
         public static void Register()
         {
@@ -47,9 +47,23 @@ namespace Biblioteque
             string newUsername = Console.ReadLine().Trim();
 
             Console.WriteLine("Введите новый пароль:");
-            string newPassword = Console.ReadLine().Trim;
+            string newPassword = Console.ReadLine().Trim();
 
-            Biblioteque.AddUserToLibrary(new Customer(newUsername, newPassword));
+            Biblioteque.AddUser(new Customer(newUsername, newPassword));
+
+            Console.WriteLine("Регистрация успешна!");
+        }
+        /// <summary>
+        /// Метод для регистрации работника
+        /// </summary>
+        public static void Register(string workername)
+        {
+            string newUsername = workername.Trim();
+
+            Console.WriteLine("Введите новый пароль:");
+            string newPassword = Console.ReadLine().Trim();
+
+            Biblioteque.AddUser(new Librarian(newUsername, newPassword));
 
             Console.WriteLine("Регистрация успешна!");
         }

@@ -23,10 +23,10 @@ namespace Biblioteque
                 LibrarianActions(librarian);
             }
             // Другие типы пользователей могут быть добавлены по мере необходимости.
-            // else if (user is SomeOtherUserType otherUserType)
-            // {
-            //     SomeOtherUserTypeActions(otherUserType);
-            // }
+            else if (user is Admin admin)
+            {
+                 AdminActions(admin);
+            }
         }
 
         /// <summary>
@@ -120,6 +120,31 @@ namespace Biblioteque
                     break;
                 //Выходим
                 case "4":
+                    Console.WriteLine("Вы вышли из аккаунта");
+                    Program.flag = true;
+                    return;
+                default:
+                    Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
+                    break;
+            }
+        }
+        private static void AdminActions(Admin admin)
+        {
+            Console.WriteLine("Ваши опции:");
+            Console.WriteLine("1. Добавить работника");
+            Console.WriteLine("2. Выйти");
+            string choice = Console.ReadLine();
+            //Перебираем варианты действий для admina
+            switch (choice)
+            {
+                //Добавляем учетку для нового работника
+                case "1":
+                    Console.WriteLine("Введите имя нового работника");
+                    string name = Console.ReadLine().Trim();
+                    admin.AddNewLibrarian(name);
+                    break;
+                //Выходим
+                case "2":
                     Console.WriteLine("Вы вышли из аккаунта");
                     Program.flag = true;
                     return;
