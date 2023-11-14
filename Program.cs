@@ -29,8 +29,8 @@ namespace Biblioteque
                         case "1":
                             //Логинимся
                             currentUser = AuthHandler.Login();
-                            if (currentUser == null) break;
-                            else
+                            if (currentUser == null) break; //Если логин прошел
+                            else //То выполняем действия для пользователя
                             {
                                 ActionsHandler.UserActions(currentUser);
                             }

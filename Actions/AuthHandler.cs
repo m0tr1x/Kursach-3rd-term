@@ -13,10 +13,10 @@ namespace Biblioteque
         {
             //Вводим логин
             Console.WriteLine("Введите логин:");
-            string username = Console.ReadLine();
+            string username = Console.ReadLine().Trim();
             //Вводим пароль
             Console.WriteLine("Введите пароль:");
-            string password = Console.ReadLine();
+            string password = Console.ReadLine().Trim();
 
             //Возвращаем список людей с таким именем
             UserSearch userSearch = new UserSearch();
@@ -44,10 +44,10 @@ namespace Biblioteque
         public static void Register()
         {
             Console.WriteLine("Введите новый логин:");
-            string newUsername = Console.ReadLine();
+            string newUsername = Console.ReadLine().Trim();
 
             Console.WriteLine("Введите новый пароль:");
-            string newPassword = Console.ReadLine();
+            string newPassword = Console.ReadLine().Trim;
 
             Biblioteque.AddUserToLibrary(new Customer(newUsername, newPassword));
 
