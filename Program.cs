@@ -4,18 +4,18 @@ namespace Biblioteque
 {
     class Program
     {
+        public static bool flag;
         static void Main()
         {
             DataHandler.LoadData(); //Загружаем данные при старте программы
             AppDomain.CurrentDomain.ProcessExit += DataHandler.OnExit; // Подисываемся на событие закрытия приложения
             Console.WriteLine("Добро пожаловать в библиотеку");
             User currentUser = null;
-            bool exitWish = false;
             //Смотрим логнился ли пользователь
-
-            while (true)
-            {
-                if (currentUser == null || exitWish  == true)
+            
+                while (true)
+                {
+                if (currentUser == null)
                 {
                     Console.WriteLine("Выберите действие:");
                     Console.WriteLine("1. Войти");
@@ -32,7 +32,7 @@ namespace Biblioteque
                             if (currentUser == null) break; //Если логин прошел
                             else //То выполняем действия для пользователя
                             {
-                                ActionsHandler.UserActions(currentUser,exitWish);
+                                ActionsHandler.UserActions(currentUser);
                             }
                             break;
                         //Регистрация
@@ -42,15 +42,19 @@ namespace Biblioteque
                         //Выход
                         case "3":
                             Console.WriteLine("До свидания!");
-                            break;
+                            return;
                         default:
                             Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
                             break;
                     }
-
                 }
-                else ActionsHandler.UserActions(currentUser,exitWish);
+                // Пользователь залогинен, выполняем его действия
+                else if (!flag) ActionsHandler.UserActions(currentUser);
+                else currentUser = null;
+
+
             }
+
         }
     }
 }

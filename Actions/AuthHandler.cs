@@ -26,7 +26,7 @@ namespace Biblioteque
             {
                 if (foundUsers[0].Authenticate(password))
                 {
-                    Console.WriteLine($"Вход выполнен успешно!Здравствуйте, {foundUsers[0].Name}");
+                    Console.WriteLine($"Вход выполнен успешно!Здравствуйте {foundUsers[0].Name}");
                     return foundUsers[0];
                 }
                 else Console.WriteLine("Вход не выполнен, неправильный пароль"); return null;

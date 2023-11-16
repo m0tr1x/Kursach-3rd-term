@@ -12,20 +12,20 @@ namespace Biblioteque
         /// </summary>
         /// <typeparam name="T">Тип пользователя</typeparam>
         /// <param name="user">Пользователь</param>
-        public static void UserActions<T>(T user,bool exitWish) where T : User
+        public static void UserActions<T>(T user) where T : User
         {
             if (user is Customer customer)
             {
-                CustomerActions(customer, exitWish);
+                CustomerActions(customer);
             }
             else if (user is Librarian librarian)
             {
-                LibrarianActions(librarian, exitWish);
+                LibrarianActions(librarian);
             }
             // Другие типы пользователей могут быть добавлены по мере необходимости.
             else if (user is Admin admin)
             {
-                 AdminActions(admin, exitWish);
+                 AdminActions(admin);
             }
         }
 
@@ -33,7 +33,7 @@ namespace Biblioteque
         /// Опции доступные для читателя
         /// </summary>
         /// <param name="customer">Читатель</param>
-        private static void CustomerActions(Customer customer, bool exitWish)
+        private static void CustomerActions(Customer customer)
         {
             BookSearch bookSearch = new();
             Console.WriteLine("Ваши опции:");
@@ -69,13 +69,12 @@ namespace Biblioteque
                 case "3":
                     customer.GetCustomerBooks();
                     break;
-                //Выход
+                 //Выход
                 case "4":
                     Console.WriteLine("Вы вышли из аккаунта");
-                    exitWish = true;
+                    Program.flag = true;
                     break;
-
-
+                    
                 default:
                     Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
                     break;
@@ -86,7 +85,7 @@ namespace Biblioteque
         /// Обработка действий для библиотекаря
         /// </summary>
         /// <param name="librarian">Библиотекарь</param>
-        private static void LibrarianActions(Librarian librarian, bool exitWish)
+        private static void LibrarianActions(Librarian librarian)
         {
             Console.WriteLine("Ваши опции:");
             Console.WriteLine("1. Добавить книгу");
@@ -122,14 +121,14 @@ namespace Biblioteque
                 //Выходим
                 case "4":
                     Console.WriteLine("Вы вышли из аккаунта");
-                   
-                    break;
+                    Program.flag = true;
+                    return;
                 default:
                     Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
                     break;
             }
         }
-        private static void AdminActions(Admin admin, bool exitWish)
+        private static void AdminActions(Admin admin)
         {
             Console.WriteLine("Ваши опции:");
             Console.WriteLine("1. Добавить работника");
@@ -147,7 +146,8 @@ namespace Biblioteque
                 //Выходим
                 case "2":
                     Console.WriteLine("Вы вышли из аккаунта");
-                    break;
+                    Program.flag = true;
+                    return;
                 default:
                     Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
                     break;
