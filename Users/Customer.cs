@@ -6,11 +6,17 @@
     public class Customer : User
     {
         private List<Book> _takenBooks;
-        public Customer(string name, string password,int id) : base("Читатель", name, password, id) { _takenBooks = new List<Book>(); }
+        public Customer(string name, string password, int id) : base("Читатель", name, password, id) { UpdateBooks(); }
         /// <summary>
         /// Метод для взятия книги в библиотеке
         /// </summary>
         /// <param name="book"> экземпляр книги</param>
+
+
+        public void UpdateBooks()
+        {
+            this._takenBooks = Biblioteque.books.Where(book => book.Owner == this.Id).ToList();
+        }
         public void GetBook(Book book)
         {
             if (book.Owner == 0)
@@ -52,7 +58,6 @@
                 {
                     Console.WriteLine($"Книга: {book.Name} от {book.Author}");
                 }
-
             }
             else
             {

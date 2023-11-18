@@ -11,8 +11,8 @@ namespace Biblioteque
         /// </summary>
         public static void LoadData()
         {
-            Biblioteque.users = Repository.LoadUsers("users.txt");
             Biblioteque.books = Repository.LoadBooks("books.txt");
+            Biblioteque.users = Repository.LoadUsers("users.txt");
         }
 
         /// <summary>
