@@ -8,6 +8,7 @@ namespace Biblioteque
     {
         // Поле для хранения роли пользователя
         public string Role { get; }
+        public int Id { get; private set; }
 
         // ФИО пользователя
         private string _name;
@@ -21,11 +22,12 @@ namespace Biblioteque
         }
 
         // Конструктор класса User
-        public User(string role, string name, string password)
+        public User(string role, string name, string password, int id)
         {
             Role = role;
             Name = name;
             Password = password;
+            Id = id;
         }
 
         /// <summary>

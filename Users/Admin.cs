@@ -3,7 +3,7 @@ namespace Biblioteque
 {
     public class Admin : User
     {
-        public Admin(string role, string name, string password) : base("Администатор", name, password)
+        public Admin(string name, string password, int id) : base("Администатор", name, password, id)
         {
         }
         /// <summary>

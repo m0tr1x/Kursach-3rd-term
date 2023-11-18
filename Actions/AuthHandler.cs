@@ -11,23 +11,23 @@ namespace Biblioteque
         /// </summary>
         public static User Login()
         {
-            //Вводим логин
-            Console.WriteLine("Введите логин:");
-            string username = Console.ReadLine().Trim();
+            //Вводим id
+            Console.WriteLine("Введите ваш id");
+            int id = int.Parse(Console.ReadLine().Trim());
             //Вводим пароль
             Console.WriteLine("Введите пароль:");
             string password = Console.ReadLine().Trim();
 
-            //Возвращаем список людей с таким именем
+            //Возвращаем людей с таким именем
             UserSearch userSearch = new UserSearch();
-            List<User> foundUsers = userSearch.SearchByName(Biblioteque.users, username);
+            User foundUser = userSearch.SearchById(Biblioteque.users, id);
             //Если он не пустой, валидируем пароль
-            if(foundUsers.Count > 0)
+            if(foundUser != null)
             {
-                if (foundUsers[0].Authenticate(password))
+                if (foundUser.Authenticate(password))
                 {
-                    Console.WriteLine($"Вход выполнен успешно!Здравствуйте {foundUsers[0].Name}");
-                    return foundUsers[0];
+                    Console.WriteLine($"Вход выполнен успешно!Здравствуйте {foundUser.Name}");
+                    return foundUser;
                 }
                 else Console.WriteLine("Вход не выполнен, неправильный пароль"); return null;
             }
@@ -49,7 +49,7 @@ namespace Biblioteque
             Console.WriteLine("Введите новый пароль:");
             string newPassword = Console.ReadLine().Trim();
 
-            Biblioteque.AddUser(new Customer(newUsername, newPassword));
+            Biblioteque.AddUser(new Customer(newUsername, newPassword,Biblioteque.GetLastUserId()+1));
 
             Console.WriteLine("Регистрация успешна!");
         }
@@ -63,7 +63,7 @@ namespace Biblioteque
             Console.WriteLine("Введите новый пароль:");
             string newPassword = Console.ReadLine().Trim();
 
-            Biblioteque.AddUser(new Librarian(newUsername, newPassword));
+            Biblioteque.AddUser(new Librarian(newUsername, newPassword, Biblioteque.GetLastUserId() + 1));
 
             Console.WriteLine("Регистрация успешна!");
         }

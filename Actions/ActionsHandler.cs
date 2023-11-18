@@ -113,12 +113,12 @@ namespace Biblioteque
         /// <param name="customer"></param>
         private static void TakeBook(Customer customer)
         {
-            Console.WriteLine("Какую именно книгу вы хотите взять?");
-            if(Biblioteque.DisplayAllAvaliableBooks() == 0)
+            if (Biblioteque.DisplayAllAvaliableBooks() == 0)
             {
                 Console.WriteLine("Доступных книг нет");
                 return;
             };
+            Console.WriteLine("Какую именно книгу вы хотите взять?");
             string bookNameToTake = Console.ReadLine().Trim();
             BookSearch searcher = new();
             List<Book> theoryBooks = searcher.SearchByName(Biblioteque.books, bookNameToTake);
@@ -158,7 +158,7 @@ namespace Biblioteque
             Console.WriteLine("Состояние:");
             double condition;
             double.TryParse(Console.ReadLine(), out condition);
-            Book book = new(name, author, condition, true);
+            Book book = new(name, author, condition);
             librarian.AddBook(book);
         }
         /// <summary>

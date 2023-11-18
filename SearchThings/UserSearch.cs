@@ -17,6 +17,17 @@
             List<User> foundUsers = users.Where(user => user.Name.ToLower().Contains(name.ToLower())).ToList();
             return foundUsers;
         }
+        /// <summary>
+        /// Метод для поиска пользователей по id
+        /// </summary>
+        /// <param name="users"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+
+        public User SearchById(List<User> users, int id)
+        {
+            return users.FirstOrDefault(user => (user.Id == id));
+        }
 
         public static List<User> SearchByRole(List<User> users, string role)
         {

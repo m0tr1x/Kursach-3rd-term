@@ -16,6 +16,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="bin\Debug\net6.0\users.txt" />
+    <None Include="bin\Debug\net6.0\books.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Users\" />

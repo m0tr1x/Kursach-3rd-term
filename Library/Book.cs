@@ -9,7 +9,6 @@
         private string? _name;
         private string? _author;
         private double _condition;
-        private string? _genre;
         // Название книги
         public string? Name
         {
@@ -33,24 +32,33 @@
             }
         }
         // Наличие книги
-        public bool Avaliable { get; set; }
-        public void MarkAsTaken()
+        public int Owner { get; private set; } = 0;
+        /// <summary>
+        /// Метод для обозначения книги как взятой
+        /// </summary>
+        /// <param name="Owner"></param>
+        public void MarkAsTaken(Customer Owner)
         {
-            this.Avaliable = false;
+            this.Owner = Owner.Id;
             Condition -= 1;
         }
-
+        /// <summary>
+        /// Метод для обозначения книги возвращенной
+        /// </summary>
         public void MarkAsReturned()
         {
-            this.Avaliable = true;
+            this.Owner = 0;
         }
 
-        public Book(string Name, string Author, double Condition, bool Avaliable)
+        public Book(string Name, string Author, double Condition)
         {
             this.Name = Name;
             this.Author = Author;
             this.Condition = Condition;
-            this.Avaliable = Avaliable;
+        }
+        public Book(string Name, string Author, double Condition,int Owner) : this(Name, Author, Condition)
+        {
+            this.Owner = Owner;
         }
 
     }

@@ -6,17 +6,17 @@
     public class Customer : User
     {
         private List<Book> _takenBooks;
-        public Customer(string name, string password) : base("Читатель", name, password) { _takenBooks = new List<Book>(); }
+        public Customer(string name, string password,int id) : base("Читатель", name, password, id) { _takenBooks = new List<Book>(); }
         /// <summary>
         /// Метод для взятия книги в библиотеке
         /// </summary>
         /// <param name="book"> экземпляр книги</param>
         public void GetBook(Book book)
         {
-            if (book.Avaliable)
+            if (book.Owner == 0)
             {
                 _takenBooks.Add(book);
-                book.MarkAsTaken();
+                book.MarkAsTaken(this);
                 Console.WriteLine($"{Name} взял книгу: {book.Name} от {book.Author}");
             }
             else

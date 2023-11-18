@@ -8,6 +8,15 @@ namespace Biblioteque
     {
         public static List<Book> books = new();
         public static List<User> users = new();
+
+        /// <summary>
+        /// Метод для получения id последнего пользователя
+        /// </summary>
+        /// <returns></returns>
+        public static int GetLastUserId()
+        {
+            return users[^1].Id;
+        }
         /// <summary>1
         /// Метод для вывод количества книг на экран
         /// </summary>
@@ -25,7 +34,6 @@ namespace Biblioteque
         }
         public static void GetBookFromLibrary(Book example)
         {
-            example.Avaliable = false;
             example.Condition -= 1;
         }
         /// <summary>
@@ -35,7 +43,7 @@ namespace Biblioteque
         {
             foreach (var user in users)
             {
-                Console.WriteLine($"User: {user.Name} ({user.Role})");
+                Console.WriteLine($"Id: {user.Id} Name: {user.Name} ({user.Role})");
             }
             Console.WriteLine();
         }
@@ -46,7 +54,7 @@ namespace Biblioteque
         {
             foreach (var book in books)
             {
-                Console.WriteLine($"Название: {book.Name} Автор: {book.Author}, Состояние: {book.Condition}%, В наличии: {(book.Avaliable ? "Да" : "Нет")}");
+                Console.WriteLine($"Название: {book.Name} Автор: {book.Author}, Состояние: {book.Condition}%, В наличии: {(book.Owner == 0 ? "Да" : "Нет")}");
             }
             Console.WriteLine();
         }
@@ -58,10 +66,10 @@ namespace Biblioteque
         {
             foreach (var book in books)
             {
-                if(book.Avaliable) Console.WriteLine($"Название: {book.Name} Автор: {book.Author}, Состояние: {book.Condition}%");
+                if(book.Owner ==0) Console.WriteLine($"Название: {book.Name} Автор: {book.Author}, Состояние: {book.Condition}%");
             }
             Console.WriteLine();
-            return books.Where(book => book.Avaliable).ToList().Count;
+            return books.Where(book => book.Owner ==0).ToList().Count;
         }
         /// <summary>
         /// Метод для добавления пользователя в библиотеку

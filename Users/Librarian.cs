@@ -7,7 +7,7 @@ namespace Biblioteque
     /// </summary>
     public class Librarian : User
     {
-        public Librarian(string name, string password) : base("Работник", name, password) { }
+        public Librarian(string name, string password, int id) : base("Работник", name, password, id) { }
         /// <summary>
         /// Метод для добавление книги со стороны работника
         /// </summary>
