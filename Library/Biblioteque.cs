@@ -50,13 +50,18 @@ namespace Biblioteque
             }
             Console.WriteLine();
         }
-        public static void DisplayAllAvaliableBooks()
+        /// <summary>
+        /// Метод для возвращения и вывода всех доступных книг
+        /// </summary>
+        /// <returns></returns>
+        public static int DisplayAllAvaliableBooks()
         {
             foreach (var book in books)
             {
                 if(book.Avaliable) Console.WriteLine($"Название: {book.Name} Автор: {book.Author}, Состояние: {book.Condition}%");
             }
             Console.WriteLine();
+            return books.Where(book => book.Avaliable).ToList().Count;
         }
         /// <summary>
         /// Метод для добавления пользователя в библиотеку

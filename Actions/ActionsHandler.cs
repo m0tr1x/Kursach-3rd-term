@@ -1,41 +1,32 @@
 ﻿using System;
 
+
 namespace Biblioteque
 {
-    /// <summary>
-    /// Обработка действий для пользователей
-    /// </summary>
     public static class ActionsHandler
     {
-        /// <summary>
-        /// Обобщенный метод для обработки действий пользователя
-        /// </summary>
-        /// <typeparam name="T">Тип пользователя</typeparam>
-        /// <param name="user">Пользователь</param>
+
         public static void UserActions<T>(T user) where T : User
         {
-            if (user is Customer customer)
+            switch (user)
             {
-                CustomerActions(customer);
-            }
-            else if (user is Librarian librarian)
-            {
-                LibrarianActions(librarian);
-            }
-            // Другие типы пользователей могут быть добавлены по мере необходимости.
-            else if (user is Admin admin)
-            {
-                 AdminActions(admin);
+                case Customer customer:
+                    CustomerActions(customer);
+                    break;
+                case Librarian librarian:
+                    LibrarianActions(librarian);
+                    break;
+                case Admin admin:
+                    AdminActions(admin);
+                    break;
             }
         }
-
         /// <summary>
-        /// Опции доступные для читателя
+        /// Действия для пользователя
         /// </summary>
-        /// <param name="customer">Читатель</param>
+        /// <param name="customer"><Экземпляр пользователя/param>
         private static void CustomerActions(Customer customer)
         {
-            BookSearch bookSearch = new();
             Console.WriteLine("Ваши опции:");
             Console.WriteLine("1. Взять книгу");
             Console.WriteLine("2. Вернуть книгу");
@@ -43,48 +34,29 @@ namespace Biblioteque
             Console.WriteLine("4. Выйти");
 
             string choice = Console.ReadLine();
-            List<Book> theoryBooks;
-            //Перебираем варианты действий для пользователя
             switch (choice)
             {
-                //Взятие книги
                 case "1":
-                    Console.WriteLine("Какую именно книгу вы хотите взять?");
-                    Biblioteque.DisplayAllAvaliableBooks();
-                    string bookNameToTake = Console.ReadLine();
-                    theoryBooks = bookSearch.SearchByName(Biblioteque.books, bookNameToTake);
-                    if (theoryBooks.Count != 0) customer.GetBook(theoryBooks[0]);
-                    else Console.WriteLine("Такой книги нет");
+                    TakeBook(customer);
                     break;
-                //Возвращение книги
                 case "2":
-                    Console.WriteLine("Какую именно книгу вы хотите вернуть?");
-                    customer.GetCustomerBooks();
-                    string bookToReturn = Console.ReadLine();
-                    theoryBooks = bookSearch.SearchByName(Biblioteque.books, bookToReturn);
-                    if (theoryBooks.Count != 0) customer.ReturnBook(theoryBooks[0]);
-                    else Console.WriteLine("У вас нет такой книги");
+                    ReturnBook(customer);
                     break;
-                //Вывод всех книг пользователя
                 case "3":
                     customer.GetCustomerBooks();
                     break;
-                 //Выход
                 case "4":
-                    Console.WriteLine("Вы вышли из аккаунта");
-                    Program.flag = true;
+                    ExitAccount();
                     break;
-                    
                 default:
                     Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
                     break;
             }
         }
-
         /// <summary>
-        /// Обработка действий для библиотекаря
+        /// Действия для работника
         /// </summary>
-        /// <param name="librarian">Библиотекарь</param>
+        /// <param name="librarian">Экземпляр работника</param>
         private static void LibrarianActions(Librarian librarian)
         {
             Console.WriteLine("Ваши опции:");
@@ -94,64 +66,117 @@ namespace Biblioteque
             Console.WriteLine("4. Выйти");
 
             string choice = Console.ReadLine();
-            //Перебираем варианты действий для библиотекаря
             switch (choice)
             {
-                //Добавление книги
                 case "1":
-                    Console.WriteLine("Введите данные книги, которую хотите добавить");
-                    Console.WriteLine("Название:");
-                    string name = Console.ReadLine();
-                    Console.WriteLine("Автор:");
-                    string author = Console.ReadLine();
-                    Console.WriteLine("Состояние:");
-                    double condition;
-                    double.TryParse(Console.ReadLine(), out condition);
-                    Book book = new(name, author, condition, true);
-                    librarian.AddBook(book);
+                    AddBook(librarian);
                     break;
-                //Выводим на экран все книги в ней
                 case "2":
                     Biblioteque.DisplayAllBooks();
                     break;
-                //Выводим на экран всех пользователей
                 case "3":
                     Biblioteque.DisplayAllUsers();
                     break;
-                //Выходим
                 case "4":
-                    Console.WriteLine("Вы вышли из аккаунта");
-                    Program.flag = true;
-                    return;
+                    ExitAccount();
+                    break;
                 default:
                     Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
                     break;
             }
         }
+
         private static void AdminActions(Admin admin)
         {
             Console.WriteLine("Ваши опции:");
             Console.WriteLine("1. Добавить работника");
             Console.WriteLine("2. Выйти");
+
             string choice = Console.ReadLine();
-            //Перебираем варианты действий для admina
             switch (choice)
             {
-                //Добавляем учетку для нового работника
                 case "1":
-                    Console.WriteLine("Введите имя нового работника");
-                    string name = Console.ReadLine().Trim();
-                    admin.AddNewLibrarian(name);
+                    AddNewLibrarian(admin);
                     break;
-                //Выходим
                 case "2":
-                    Console.WriteLine("Вы вышли из аккаунта");
-                    Program.flag = true;
-                    return;
+                    ExitAccount();
+                    break;
                 default:
                     Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
                     break;
             }
         }
+
+        /// <summary>
+        /// Метод для взятия книги пользователем
+        /// </summary>
+        /// <param name="customer"></param>
+        private static void TakeBook(Customer customer)
+        {
+            Console.WriteLine("Какую именно книгу вы хотите взять?");
+            if(Biblioteque.DisplayAllAvaliableBooks() == 0)
+            {
+                Console.WriteLine("Доступных книг нет");
+                return;
+            };
+            string bookNameToTake = Console.ReadLine().Trim();
+            BookSearch searcher = new();
+            List<Book> theoryBooks = searcher.SearchByName(Biblioteque.books, bookNameToTake);
+            if (theoryBooks.Count != 0) customer.GetBook(theoryBooks[0]);
+            else Console.WriteLine("Такой книги нет");
+        }
+        /// <summary>
+        /// Метод для возвращения книги пользователем
+        /// </summary>
+        /// <param name="customer"></param>
+
+        private static void ReturnBook(Customer customer)
+        {
+            if(customer.GetCustomerBooks() == 0)
+            {
+                return;
+            }
+            Console.WriteLine("Какую именно книгу вы хотите вернуть?");
+            string bookToReturn = Console.ReadLine();
+            BookSearch searcher = new();
+            List<Book> theoryBooks = searcher.SearchByName(Biblioteque.books, bookToReturn);
+            if (theoryBooks.Count != 0) customer.ReturnBook(theoryBooks[0]);
+            else Console.WriteLine("У вас нет такой книги");
+        }
+
+        /// <summary>
+        /// Метод для добавления книги в библиотеку
+        /// </summary>
+        /// <param name="librarian"></param>
+        private static void AddBook(Librarian librarian)
+        {
+            Console.WriteLine("Введите данные книги, которую хотите добавить");
+            Console.WriteLine("Название:");
+            string name = Console.ReadLine();
+            Console.WriteLine("Автор:");
+            string author = Console.ReadLine();
+            Console.WriteLine("Состояние:");
+            double condition;
+            double.TryParse(Console.ReadLine(), out condition);
+            Book book = new(name, author, condition, true);
+            librarian.AddBook(book);
+        }
+        /// <summary>
+        /// Метод для добавления нового работника
+        /// </summary>
+        /// <param name="admin"></param>
+        private static void AddNewLibrarian(Admin admin)
+        {
+            Console.WriteLine("Введите имя нового работника");
+            string name = Console.ReadLine().Trim();
+            admin.AddNewLibrarian(name);
+        }
+
+        private static void ExitAccount()
+        {
+            Console.WriteLine("Вы вышли из аккаунта");
+            WholeSystem.exitAccount = true;
+        }
     }
+
 }

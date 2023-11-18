@@ -1,9 +1,12 @@
 ﻿using System;
+
+
 namespace Biblioteque
 {
 	public class WholeSystem
 	{
-        private bool programRunning = true;
+        public static bool exitAccount = false;
+        private bool programRunning = true; // Костыль, чтобы выход корректно работал
         private User currentUser = null;
 
         /// <summary>
@@ -22,7 +25,7 @@ namespace Biblioteque
                 {
                     HandleGuestActions();
                 }
-                else if (!Program.flag)
+                else if (!exitAccount)
                 {
                     ActionsHandler.UserActions(currentUser);
                 }

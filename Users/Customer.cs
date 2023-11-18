@@ -44,7 +44,7 @@
         /// <summary>
         /// Метод для того, чтобы узнать какие книги есть у пользователя
         /// </summary>
-        public void GetCustomerBooks()
+        public int GetCustomerBooks()
         {
             if(this._takenBooks.Count != 0)
             {
@@ -52,12 +52,14 @@
                 {
                     Console.WriteLine($"Книга: {book.Name} от {book.Author}");
                 }
+
             }
             else
             {
                 Console.WriteLine("У вас нет книг");
             }
-            
+            return _takenBooks.Count();
+
         }
     }
 
