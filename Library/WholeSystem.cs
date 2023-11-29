@@ -7,7 +7,7 @@ namespace Biblioteque
 	{
         public static bool exitAccount = false;
         private bool programRunning = true; // Костыль, чтобы выход корректно работал
-        private User currentUser = null;
+        private User? currentUser = null;
 
         /// <summary>
         /// Метод для запуска логики

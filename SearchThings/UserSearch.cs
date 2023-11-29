@@ -24,7 +24,7 @@
         /// <param name="id"></param>
         /// <returns></returns>
 
-        public User SearchById(List<User> users, int id)
+        public User? SearchById(List<User?> users, int id)
         {
             return users.FirstOrDefault(user => (user.Id == id));
         }

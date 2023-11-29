@@ -6,7 +6,7 @@ namespace Biblioteque
     public static class ActionsHandler
     {
 
-        public static void UserActions<T>(T user) where T : User
+        public static void UserActions<T>(T? user) where T : User
         {
             switch (user)
             {

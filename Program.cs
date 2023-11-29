@@ -1,6 +1,4 @@
-﻿
-
-namespace Biblioteque
+﻿namespace Biblioteque
 {
     class Program
     {
@@ -9,7 +7,5 @@ namespace Biblioteque
             WholeSystem wholeSystem = new WholeSystem();
             wholeSystem.Run();
         }
-        
     }
 }
-

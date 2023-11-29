@@ -7,7 +7,7 @@ namespace Biblioteque
     static class Biblioteque
     {
         public static List<Book> books = new();
-        public static List<User> users = new();
+        public static List<User?> users = new();
 
         /// <summary>
         /// Метод для получения id последнего пользователя

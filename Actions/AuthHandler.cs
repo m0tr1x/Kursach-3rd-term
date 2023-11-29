@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 namespace Biblioteque
 {
     /// <summary>
@@ -9,18 +9,18 @@ namespace Biblioteque
         /// <summary>
         /// Метод для логина
         /// </summary>
-        public static User Login()
+        public static User? Login()
         {
             //Вводим id
             Console.WriteLine("Введите ваш id");
-            int id = int.Parse(Console.ReadLine().Trim());
+            int id = int.Parse(Console.ReadLine()!.Trim());
             //Вводим пароль
             Console.WriteLine("Введите пароль:");
-            string password = Console.ReadLine().Trim();
+            string password = Console.ReadLine()!.Trim();
 
             //Возвращаем людей с таким именем
             UserSearch userSearch = new UserSearch();
-            User foundUser = userSearch.SearchById(Biblioteque.users, id);
+            User? foundUser = userSearch.SearchById(Biblioteque.users, id);
             //Если он не пустой, валидируем пароль
             if(foundUser != null)
             {
@@ -44,10 +44,10 @@ namespace Biblioteque
         public static void Register()
         {
             Console.WriteLine("Введите новый логин:");
-            string newUsername = Console.ReadLine().Trim();
+            string newUsername = Console.ReadLine()!.Trim();
 
             Console.WriteLine("Введите новый пароль:");
-            string newPassword = Console.ReadLine().Trim();
+            string newPassword = Console.ReadLine()!.Trim();
 
             Biblioteque.AddUser(new Customer(newUsername, newPassword,Biblioteque.GetLastUserId()+1));
 
@@ -61,7 +61,7 @@ namespace Biblioteque
             string newUsername = workername.Trim();
 
             Console.WriteLine("Введите новый пароль:");
-            string newPassword = Console.ReadLine().Trim();
+            string newPassword = Console.ReadLine()!.Trim();
 
             Biblioteque.AddUser(new Librarian(newUsername, newPassword, Biblioteque.GetLastUserId() + 1));
 

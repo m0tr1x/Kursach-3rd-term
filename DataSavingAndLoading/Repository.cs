@@ -14,9 +14,9 @@ namespace Biblioteque
         /// </summary>
         /// <param name="filePath">Путь к файлу</param>
         /// <returns></returns>
-        public static List<User> LoadUsers(string filePath)
+        public static List<User?> LoadUsers(string filePath)
         {
-            List<User> users = new();
+            List<User?> users = new();
 
             try
             {
@@ -91,13 +91,13 @@ namespace Biblioteque
         /// </summary>
         /// <param name="users">Список пользователей</param>
         /// <param name="filePath">Путь к файлу</param>
-        public static void SaveUsers(List<User> users, string filePath)
+        public static void SaveUsers(List<User?> users, string filePath)
         {
             try
             {
                 using (StreamWriter writer = new StreamWriter(filePath))
                 {
-                    foreach (User user in users)
+                    foreach (User? user in users)
                     {
                         writer.WriteLine($"{user.Name},{user.Role},{user.Password},{user.Id}");
                     }
