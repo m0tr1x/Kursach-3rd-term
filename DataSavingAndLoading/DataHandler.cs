@@ -34,16 +34,6 @@ namespace Biblioteque
             UpdateData(); // Обновление данных при закрытии программы
         }
 
-        /// <summary>
-        /// Событие для старта программы
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public static void OnStart(object sender, EventArgs e)
-        {
-            LoadData(); // Загружаем данные при запуске программы
-        }
-
     }
 }
 

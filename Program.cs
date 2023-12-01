@@ -4,7 +4,7 @@
     {
         public static void Main()
         {
-            WholeSystem wholeSystem = new WholeSystem();
+            Boostraper wholeSystem = new Boostraper();
             wholeSystem.Run();
         }
     }

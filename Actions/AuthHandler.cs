@@ -6,17 +6,24 @@ namespace Biblioteque
     /// </summary>
 	public class AuthHandler
 	{
+        private MessagesToUser _messagesToUser { get; set; }
+
+        public AuthHandler(MessagesToUser messagesToUser)
+        {
+            _messagesToUser = messagesToUser;
+        }
         /// <summary>
         /// Метод для логина
         /// </summary>
-        public static User? Login()
+        public User? Login()
         {
             //Вводим id
-            Console.WriteLine("Введите ваш id");
+            _messagesToUser.GetIdFromUser();
             int id = int.Parse(Console.ReadLine()!.Trim());
             //Вводим пароль
-            Console.WriteLine("Введите пароль:");
+            _messagesToUser.GetPassword();
             string password = Console.ReadLine()!.Trim();
+            
 
             //Возвращаем людей с таким именем
             UserSearch userSearch = new UserSearch();
@@ -26,46 +33,50 @@ namespace Biblioteque
             {
                 if (foundUser.Authenticate(password))
                 {
-                    Console.WriteLine($"Вход выполнен успешно!Здравствуйте {foundUser.Name}");
+                    _messagesToUser.SayHello(foundUser.Name);
                     return foundUser;
                 }
-                else Console.WriteLine("Вход не выполнен, неправильный пароль"); return null;
+                else _messagesToUser.SendAuthErr(); return null;
             }
             //Если нет ошибка
             else
             {
-                Console.WriteLine("Пользователь с указанным именем не найден"); return null;
+                _messagesToUser.SendAuthErr(); return null;
             }
 
         }
+
+        
+
         /// <summary>
         /// Метод для регистрации пользователя
         /// </summary>
-        public static void Register()
+        public void Register()
         {
-            Console.WriteLine("Введите новый логин:");
+            _messagesToUser.GetName();
             string newUsername = Console.ReadLine()!.Trim();
 
-            Console.WriteLine("Введите новый пароль:");
+            _messagesToUser.GetPassword();
             string newPassword = Console.ReadLine()!.Trim();
 
             Biblioteque.AddUser(new Customer(newUsername, newPassword,Biblioteque.GetLastUserId()+1));
 
-            Console.WriteLine("Регистрация успешна!");
+            _messagesToUser.SendOK();
         }
+
+        
+
+
         /// <summary>
         /// Метод для регистрации работника
         /// </summary>
-        public static void Register(string workername)
+        public void Register(string workername)
         {
             string newUsername = workername.Trim();
-
-            Console.WriteLine("Введите новый пароль:");
+            _messagesToUser.GetPassword();
             string newPassword = Console.ReadLine()!.Trim();
-
             Biblioteque.AddUser(new Librarian(newUsername, newPassword, Biblioteque.GetLastUserId() + 1));
-
-            Console.WriteLine("Регистрация успешна!");
+            _messagesToUser.SendOK();
         }
     }
 }

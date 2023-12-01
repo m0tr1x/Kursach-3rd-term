@@ -3,10 +3,19 @@
 
 namespace Biblioteque
 {
-    public static class ActionsHandler
+    public class ActionsHandler
     {
+        private MessagesToUser _messagesToUser { get; set; }
+        private AuthHandler _authHandler { get; set; }
 
-        public static void UserActions<T>(T? user) where T : User
+        public ActionsHandler(MessagesToUser messagesToUser, AuthHandler authHandler)
+        {
+            _messagesToUser = messagesToUser;
+            _authHandler = authHandler;
+        }
+        
+
+        public void SetUserActions<T>(T? user) where T : User
         {
             switch (user)
             {
@@ -24,14 +33,10 @@ namespace Biblioteque
         /// <summary>
         /// Действия для пользователя
         /// </summary>
-        /// <param name="customer"><Экземпляр пользователя/param>
-        private static void CustomerActions(Customer customer)
+        /// <param name="customer"><Экземпляр пользователя</param>
+        private void CustomerActions(Customer customer)
         {
-            Console.WriteLine("Ваши опции:");
-            Console.WriteLine("1. Взять книгу");
-            Console.WriteLine("2. Вернуть книгу");
-            Console.WriteLine("3. Посмотреть взятые книги");
-            Console.WriteLine("4. Выйти");
+            _messagesToUser.SendCustomerText();
 
             string choice = Console.ReadLine();
             switch (choice)
@@ -49,21 +54,20 @@ namespace Biblioteque
                     ExitAccount();
                     break;
                 default:
-                    Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
+                    _messagesToUser.SendErr();
                     break;
             }
         }
+
+        
+
         /// <summary>
         /// Действия для работника
         /// </summary>
         /// <param name="librarian">Экземпляр работника</param>
-        private static void LibrarianActions(Librarian librarian)
+        private void LibrarianActions(Librarian librarian)
         {
-            Console.WriteLine("Ваши опции:");
-            Console.WriteLine("1. Добавить книгу");
-            Console.WriteLine("2. Посмотреть все книги");
-            Console.WriteLine("3. Посмотреть всех пользователей");
-            Console.WriteLine("4. Выйти");
+            _messagesToUser.SendLibrarianActions();
 
             string choice = Console.ReadLine();
             switch (choice)
@@ -72,90 +76,99 @@ namespace Biblioteque
                     AddBook(librarian);
                     break;
                 case "2":
-                    Biblioteque.DisplayAllBooks();
+                    _messagesToUser.DisplayAllBooks();
                     break;
                 case "3":
-                    Biblioteque.DisplayAllUsers();
+                    _messagesToUser.DisplayAllUsers();
                     break;
                 case "4":
                     ExitAccount();
                     break;
                 default:
-                    Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
+                    _messagesToUser.SendErr();
                     break;
             }
         }
 
-        private static void AdminActions(Admin admin)
+       
+
+
+        private void AdminActions(Admin admin)
         {
-            Console.WriteLine("Ваши опции:");
-            Console.WriteLine("1. Добавить работника");
-            Console.WriteLine("2. Выйти");
+            _messagesToUser.SendAdminActions();
 
             string choice = Console.ReadLine();
             switch (choice)
             {
                 case "1":
-                    AddNewLibrarian(admin);
+                    AddNewLibrarian();
                     break;
                 case "2":
                     ExitAccount();
                     break;
                 default:
-                    Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
+                    _messagesToUser.SendErr();
                     break;
             }
         }
+
+        
 
         /// <summary>
         /// Метод для взятия книги пользователем
         /// </summary>
         /// <param name="customer"></param>
-        private static void TakeBook(Customer customer)
+        private void TakeBook(Customer customer)
         {
-            if (Biblioteque.DisplayAllAvaliableBooks() == 0)
+            if (_messagesToUser.DisplayAllAvaliableBooks() == 0)
             {
-                Console.WriteLine("Доступных книг нет");
+                _messagesToUser.SendEmptyBooks();
                 return;
             };
-            Console.WriteLine("Какую именно книгу вы хотите взять?");
+            _messagesToUser.GetBookName();
             string bookNameToTake = Console.ReadLine().Trim();
             BookSearch searcher = new();
             List<Book> theoryBooks = searcher.SearchByName(Biblioteque.books, bookNameToTake);
             if (theoryBooks.Count != 0) customer.GetBook(theoryBooks[0]);
-            else Console.WriteLine("Такой книги нет");
+            else _messagesToUser.SendEmptyBooks();
         }
+
+        
+
+
         /// <summary>
         /// Метод для возвращения книги пользователем
         /// </summary>
         /// <param name="customer"></param>
 
-        private static void ReturnBook(Customer customer)
+        private void ReturnBook(Customer customer)
         {
             if(customer.GetCustomerBooks() == 0)
             {
                 return;
             }
-            Console.WriteLine("Какую именно книгу вы хотите вернуть?");
+            _messagesToUser.GetBookName();
             string bookToReturn = Console.ReadLine();
             BookSearch searcher = new();
             List<Book> theoryBooks = searcher.SearchByName(Biblioteque.books, bookToReturn);
             if (theoryBooks.Count != 0) customer.ReturnBook(theoryBooks[0]);
-            else Console.WriteLine("У вас нет такой книги");
+            else _messagesToUser.SendEmptyBooks();
         }
+
+        
 
         /// <summary>
         /// Метод для добавления книги в библиотеку
         /// </summary>
         /// <param name="librarian"></param>
-        private static void AddBook(Librarian librarian)
+        private void AddBook(Librarian librarian)
         {
-            Console.WriteLine("Введите данные книги, которую хотите добавить");
-            Console.WriteLine("Название:");
+           
+            _messagesToUser.GetBookName();
             string name = Console.ReadLine();
-            Console.WriteLine("Автор:");
+            _messagesToUser.GetAuthorName();
             string author = Console.ReadLine();
-            Console.WriteLine("Состояние:");
+            _messagesToUser.GetCondition();
             double condition;
             double.TryParse(Console.ReadLine(), out condition);
             Book book = new(name, author, condition);
@@ -165,18 +178,22 @@ namespace Biblioteque
         /// Метод для добавления нового работника
         /// </summary>
         /// <param name="admin"></param>
-        private static void AddNewLibrarian(Admin admin)
+        private void AddNewLibrarian()
         {
-            Console.WriteLine("Введите имя нового работника");
-            string name = Console.ReadLine().Trim();
-            admin.AddNewLibrarian(name);
+            _messagesToUser.GetName();
+            string? workername = Console.ReadLine();
+            _authHandler.Register(workername);
         }
 
-        private static void ExitAccount()
+        
+
+        private void ExitAccount()
         {
-            Console.WriteLine("Вы вышли из аккаунта");
-            WholeSystem.exitAccount = true;
+            _messagesToUser.SendExitAccountMessage();
+            Boostraper.exitAccount = true;
         }
+
+        
     }
 
 }

@@ -3,11 +3,21 @@
 
 namespace Biblioteque
 {
-	public class WholeSystem
+	public class Boostraper
 	{
         public static bool exitAccount = false;
         private bool programRunning = true; // Костыль, чтобы выход корректно работал
         private User? currentUser = null;
+        private MessagesToUser _messagesToUser;
+        private AuthHandler _authHandler;
+        private ActionsHandler _actionsHandler;
+
+        public Boostraper()
+        {
+            _messagesToUser = new MessagesToUser();
+            _authHandler = new AuthHandler(_messagesToUser);
+            _actionsHandler = new ActionsHandler(_messagesToUser, _authHandler);
+        }
 
         /// <summary>
         /// Метод для запуска логики
@@ -27,7 +37,7 @@ namespace Biblioteque
                 }
                 else if (!exitAccount)
                 {
-                    ActionsHandler.UserActions(currentUser);
+                    _actionsHandler.SetUserActions(currentUser);
                 }
                 else
                 {
@@ -41,34 +51,34 @@ namespace Biblioteque
         /// </summary>
         private void HandleGuestActions()
         {
-            Console.WriteLine("Выберите действие:");
-            Console.WriteLine("1. Войти");
-            Console.WriteLine("2. Зарегистрироваться");
-            Console.WriteLine("3. Выйти из программы");
+            
+            _messagesToUser.SendUnauthorizedGuestMessages();
 
             string choice = Console.ReadLine();
 
             switch (choice)
             {
                 case "1":
-                    currentUser = AuthHandler.Login();
+                    currentUser = _authHandler.Login();
                     if (currentUser != null)
                     {
-                        ActionsHandler.UserActions(currentUser);
+                        _actionsHandler.SetUserActions(currentUser);
                     }
                     break;
                 case "2":
-                    AuthHandler.Register();
+                    _authHandler.Register();
                     break;
                 case "3":
-                    Console.WriteLine("До свидания!");
+                    _messagesToUser.SendGoodbye();
                     programRunning = false;
                     break;
                 default:
-                    Console.WriteLine("Некорректный выбор. Пожалуйста, выберите снова.");
+                    _messagesToUser.SendErr();
                     break;
             }
         }
+
+        
     }
 }
 
